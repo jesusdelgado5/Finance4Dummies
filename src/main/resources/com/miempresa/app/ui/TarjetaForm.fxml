@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx/17"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.miempresa.app.ui.TarjetaController"
+      spacing="15" alignment="TOP_CENTER" styleClass="root-pane"
+      style="-fx-background-color: #f5f5f5;">
+    <padding>
+        <Insets top="20" right="30" bottom="20" left="30"/>
+    </padding>
+
+    <Label text="Gestión de Tarjetas de Crédito" styleClass="form-title"/>
+
+    <GridPane hgap="10" vgap="10">
+        <columnConstraints>
+            <ColumnConstraints percentWidth="40"/>
+            <ColumnConstraints percentWidth="60"/>
+        </columnConstraints>
+
+        <Label text="Nombre Tarjeta:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+        <TextField fx:id="nameField"
+                   promptText="Banco XYZ"
+                   GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+        <Label text="Línea de Crédito:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+        <TextField fx:id="limitField"
+                   promptText="1000.00"
+                   GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+        <Label text="Tasa Anual (%):" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+        <TextField fx:id="rateField"
+                   promptText="18"
+                   GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
+        <Label text="Fecha Corte:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+        <DatePicker fx:id="cutDatePicker"
+                    GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+
+        <Label text="Fecha Pago:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+        <DatePicker fx:id="paymentDatePicker"
+                    GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+    </GridPane>
+
+    <HBox spacing="15">
+        <Button text="Calcular Interés"
+                onAction="#onCalculateInterest"
+                styleClass="btn-primary"/>
+        <Button text="Generar Cronograma"
+                onAction="#onGenerateSchedule"
+                styleClass="btn-secondary"/>
+        <Button text="Volver al Menú"
+                onAction="#onBackToMenu"/>
+    </HBox>
+
+    <TextArea fx:id="outputArea"
+              editable="false"
+              prefRowCount="6"
+              wrapText="true"
+              styleClass="output-area"/>
+</VBox>
