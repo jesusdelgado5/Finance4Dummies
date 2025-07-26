@@ -1,57 +1,67 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.chart.BarChart?>
 <?import javafx.scene.chart.CategoryAxis?>
 <?import javafx.scene.chart.NumberAxis?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
 
-<VBox xmlns="http://javafx.com/javafx/17"
-      xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="com.miempresa.app.ui.ComparadorController"
-      spacing="15" alignment="TOP_CENTER" style="-fx-background-color: #f5f5f5;">
-    <padding>
-        <Insets top="20" right="30" bottom="20" left="30"/>
-    </padding>
 
-    <Label text="Comparador de Productos" styleClass="form-title"/>
-
-    <GridPane hgap="10" vgap="10">
-        <columnConstraints>
-            <ColumnConstraints percentWidth="20"/>
-            <ColumnConstraints percentWidth="30"/>
-            <ColumnConstraints percentWidth="20"/>
-            <ColumnConstraints percentWidth="30"/>
-        </columnConstraints>
-
-        <Label text="Producto A:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
-        <ComboBox fx:id="comboA" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
-
-        <Label text="Producto B:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
-        <ComboBox fx:id="comboB" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
-
-        <Button text="Comparar"
-                onAction="#onCompare"
-                styleClass="btn-primary"
-                GridPane.rowIndex="2" GridPane.columnIndex="0" GridPane.columnSpan="2"/>
-    </GridPane>
-
-    <BarChart fx:id="comparisonChart"
-              title="Comparación de Costo vs Principal"
-              categoryGap="150" barGap="20"
-              prefHeight="400" prefWidth="0.0" maxWidth="Infinity"
-              VBox.vgrow="ALWAYS">
-        <xAxis>
-            <CategoryAxis fx:id="xAxis"
-                          label="Métrica"
-                          tickLabelRotation="90"/>
-        </xAxis>
-        <yAxis>
-            <NumberAxis fx:id="yAxis" label="Valor"/>
-        </yAxis>
-    </BarChart>
-
-    <Button text="Volver al Menú"
-            onAction="#onBackToMenu"
-            styleClass="btn-secondary"/>
-</VBox>
+<StackPane xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.miempresa.app.ui.ComparadorController">
+   <children>
+      <ImageView fitHeight="625.0" fitWidth="800.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../../../../../../../../../Downloads/Fondo%20app.png" />
+         </image>
+      </ImageView>
+      <VBox alignment="TOP_CENTER" prefHeight="622.0" prefWidth="800.0" spacing="15" style="-fx-background-color: #d4e877;">
+          <padding>
+              <Insets bottom="20" left="30" right="30" top="20" />
+          </padding>
+      
+          <Label styleClass="form-title" text="Comparador de Productos" />
+      
+          <GridPane hgap="10" vgap="10">
+              <columnConstraints>
+                  <ColumnConstraints percentWidth="20" />
+                  <ColumnConstraints percentWidth="30" />
+                  <ColumnConstraints percentWidth="20" />
+                  <ColumnConstraints percentWidth="30" />
+              </columnConstraints>
+      
+              <Label text="Producto A:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+              <ComboBox fx:id="comboA" prefHeight="25.0" prefWidth="108.0" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+      
+              <Label text="Producto B:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+              <ComboBox fx:id="comboB" prefHeight="25.0" prefWidth="108.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+      
+              <Button onAction="#onCompare" styleClass="btn-primary" text="Comparar" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="2" />
+            <rowConstraints>
+               <RowConstraints />
+               <RowConstraints />
+               <RowConstraints />
+            </rowConstraints>
+          </GridPane>
+      
+          <BarChart fx:id="comparisonChart" barGap="20" categoryGap="150" maxWidth="Infinity" prefHeight="400" prefWidth="0.0" title="Comparación de Costo vs Principal" VBox.vgrow="ALWAYS">
+              <xAxis>
+                  <CategoryAxis label="Métrica" tickLabelRotation="90" fx:id="xAxis" />
+              </xAxis>
+              <yAxis>
+                  <NumberAxis fx:id="yAxis" label="Valor" />
+              </yAxis>
+          </BarChart>
+      
+          <Button onAction="#onBackToMenu" styleClass="btn-secondary" text="Volver al Menú" />
+      </VBox>
+   </children>
+</StackPane>

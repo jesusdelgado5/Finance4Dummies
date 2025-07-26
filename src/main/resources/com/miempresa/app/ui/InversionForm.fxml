@@ -1,49 +1,61 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.chart.LineChart?>
 <?import javafx.scene.chart.NumberAxis?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<VBox xmlns="http://javafx.com/javafx/17"
-      xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="com.miempresa.app.ui.InversionController"
-      spacing="15" alignment="TOP_CENTER" styleClass="root-pane"
-      style="-fx-background-color: #f5f5f5;">
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox alignment="TOP_CENTER" spacing="15" style="-fx-background-color: #d4e877;" styleClass="root-pane" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.miempresa.app.ui.InversionController">
     <padding>
-        <Insets top="20" right="30" bottom="20" left="30"/>
+        <Insets bottom="20" left="30" right="30" top="20" />
     </padding>
-    <Label text="Gestión de Inversiones" styleClass="form-title"/>
+    <Label styleClass="form-title" text="Gestión de Inversiones" />
     <GridPane hgap="10" vgap="10">
         <columnConstraints>
-            <ColumnConstraints percentWidth="40"/>
-            <ColumnConstraints percentWidth="60"/>
+            <ColumnConstraints percentWidth="40" />
+            <ColumnConstraints percentWidth="60" />
         </columnConstraints>
-        <Label text="Nombre Inversión:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
-        <TextField fx:id="nameField" promptText="Fondo X" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
-        <Label text="Monto Inicial:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
-        <TextField fx:id="amountField" promptText="1000.00" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
-        <Label text="Tasa Anual (%):" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
-        <TextField fx:id="rateField2" promptText="5" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
-        <Label text="Plazo (meses):" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
-        <TextField fx:id="termField2" promptText="12" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
-        <Label text="Compuesta:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
-        <CheckBox fx:id="compoundCheckBox" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
-        <Label text="Fecha Inicio:" GridPane.rowIndex="5" GridPane.columnIndex="0"/>
-        <DatePicker fx:id="startDatePicker2" GridPane.rowIndex="5" GridPane.columnIndex="1"/>
+        <Label text="Nombre Inversión:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+        <TextField fx:id="nameField" promptText="Fondo X" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+        <Label text="Monto Inicial:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+        <TextField fx:id="amountField" promptText="1000.00" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+        <Label text="Tasa Anual (%):" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+        <TextField fx:id="rateField2" promptText="5" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+        <Label text="Plazo (meses):" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+        <TextField fx:id="termField2" promptText="12" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+        <Label text="Compuesta:" GridPane.columnIndex="0" GridPane.rowIndex="4" />
+        <CheckBox fx:id="compoundCheckBox" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+        <Label text="Fecha Inicio:" GridPane.columnIndex="0" GridPane.rowIndex="5" />
+        <DatePicker fx:id="startDatePicker2" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+      <rowConstraints>
+         <RowConstraints />
+         <RowConstraints />
+         <RowConstraints />
+         <RowConstraints />
+         <RowConstraints />
+         <RowConstraints />
+      </rowConstraints>
     </GridPane>
     <HBox spacing="15">
-        <Button text="Calcular Rentabilidad" onAction="#onCalculateReturn" styleClass="btn-primary"/>
-        <Button text="Generar Proyección" onAction="#onGenerateProjection" styleClass="btn-secondary"/>
-        <Button text="Volver al Menú" onAction="#onBackToMenu2"/>
+        <Button onAction="#onCalculateReturn" styleClass="btn-primary" text="Calcular Rentabilidad" />
+        <Button onAction="#onGenerateProjection" styleClass="btn-secondary" text="Generar Proyección" />
+        <Button onAction="#onBackToMenu2" text="Volver al Menú" />
     </HBox>
-    <LineChart fx:id="projectionChart" title="Proyección de Valor"
-               prefHeight="500" prefWidth="700" VBox.vgrow="ALWAYS"
-               animated="true" createSymbols="true">
+    <LineChart fx:id="projectionChart" animated="true" createSymbols="true" prefHeight="500" prefWidth="700" title="Proyección de Valor" VBox.vgrow="ALWAYS">
         <xAxis>
-            <NumberAxis label="Mes" fx:id="xAxis2"/>
+            <NumberAxis label="Mes" fx:id="xAxis2" />
         </xAxis>
         <yAxis>
-            <NumberAxis label="Valor" fx:id="yAxis2"/>
+            <NumberAxis fx:id="yAxis2" label="Valor" />
         </yAxis>
     </LineChart>
 </VBox>
