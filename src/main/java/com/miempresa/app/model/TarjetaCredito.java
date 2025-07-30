@@ -5,9 +5,6 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Representa una tarjeta de crédito con cálculo de interés basado en días de ciclo.
- */
 public class TarjetaCredito extends ProductoFinanciero {
     private double tasaInteres; // anual en porcentaje
     private LocalDate fechaCorte;
@@ -23,15 +20,11 @@ public class TarjetaCredito extends ProductoFinanciero {
 
     @Override
     public double calcularCosto() {
-        // Validar fechas
         if (fechaPago.isBefore(fechaCorte)) {
             return 0;
         }
-        // Calcular días de facturación
         long dias = ChronoUnit.DAYS.between(fechaCorte, fechaPago);
-        // Tasa diaria: tasa anual / días del año
         double tasaDiaria = (tasaInteres / 100.0) / 365.0;
-        // Interés sobre el principal
         return montoPrincipal * tasaDiaria * dias;
     }
 
@@ -39,7 +32,6 @@ public class TarjetaCredito extends ProductoFinanciero {
     public List<String> generarCronograma() {
         List<String> cronograma = new ArrayList<>();
         double interes = calcularCosto();
-        // Pago mínimo: 5% del principal o interés si mayor
         double pagoMinimo = Math.max(montoPrincipal * 0.05, interes);
         double pagoTotal = montoPrincipal + interes;
         cronograma.add(String.format("Días de ciclo: %d", ChronoUnit.DAYS.between(fechaCorte, fechaPago)));
@@ -48,4 +40,37 @@ public class TarjetaCredito extends ProductoFinanciero {
         cronograma.add(String.format("Pago total (principal + interés): %.2f", pagoTotal));
         return cronograma;
     }
+
+    /**
+     * Simula mes a mes la deuda restante considerando interés compuesto.
+     * @return List<Double> saldos pendientes al final de cada mes tras pago mínimo
+     */
+    public List<Double> simularBalanceMensual() {
+        List<Double> balances = new ArrayList<>();
+        double balance = montoPrincipal;
+        double tasaMensual = (tasaInteres / 100.0) / 12.0;
+
+        for (int mes = 1; mes <= 600 && balance > 0; mes++) {
+            // Aplicar interés al saldo actual
+            double interes = balance * tasaMensual;
+            double saldoConInteres = balance + interes;
+
+            // Calcular pago mínimo sobre el saldo con interés
+            double pagoMinimo = Math.max(saldoConInteres * 0.05, interes);
+
+            // Nuevo balance después de pago
+            balance = saldoConInteres - pagoMinimo;
+
+            // Guardar el balance restante
+            balances.add(balance);
+        }
+        return balances;
+    }
+
+    @Override
+    public boolean esActivo() { return false; }
+    @Override
+    public int getPlazo() { return (int) ChronoUnit.MONTHS.between(fechaCorte, fechaPago); }
+    @Override
+    public double getTasaAnual() { return tasaInteres; }
 }

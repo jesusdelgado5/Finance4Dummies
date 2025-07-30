@@ -41,16 +41,31 @@ public abstract class ProductoFinanciero {
         this.fechaInicio = fechaInicio;
     }
 
-    /** Calcula el costo o interés dependiendo del tipo de producto. */
+    /**
+     * Calcula el costo o interés dependiendo del tipo de producto.
+     */
     public abstract double calcularCosto();
 
-    /** Genera un cronograma (cuotas, proyección, etc.) representado como una lista. */
+    /**
+     * Genera un cronograma (cuotas, proyección, etc.) representado como una lista.
+     */
     public abstract List<?> generarCronograma();
 
     /**
-     * Esto hace que, cuando pongas un ProductoFinanciero en un ComboBox,
-     * se muestre su nombre en lugar de algo como "com.miempresa.app.model.TarjetaCredito@4fbf..."
+     * Indica si el producto es un activo (true) o pasivo (false).
      */
+    public abstract boolean esActivo();
+
+    /**
+     * Devuelve el plazo del producto en meses.
+     */
+    public abstract int getPlazo();
+
+    /**
+     * Devuelve la tasa anual aplicada al producto (en porcentaje).
+     */
+    public abstract double getTasaAnual();
+
     @Override
     public String toString() {
         return nombre;

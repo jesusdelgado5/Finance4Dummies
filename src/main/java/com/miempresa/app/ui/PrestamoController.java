@@ -2,133 +2,208 @@ package com.miempresa.app.ui;
 
 import com.miempresa.app.model.Cuota;
 import com.miempresa.app.model.Prestamo;
-import com.miempresa.app.service.FinancieroService;
+import com.miempresa.app.util.ValidationUtil;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.chart.LineChart;
+import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
-import javafx.scene.control.Alert;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TextField;
-import javafx.scene.control.Tooltip;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 
 public class PrestamoController {
+
     @FXML private TextField nameField;
+    @FXML private Label nameErrorLabel;
+
     @FXML private TextField principalField;
+    @FXML private Label principalErrorLabel;
+
     @FXML private TextField termField;
+    @FXML private Label termErrorLabel;
+
     @FXML private TextField rateField;
+    @FXML private Label rateErrorLabel;
+
     @FXML private DatePicker startDatePicker;
-    @FXML private LineChart<Number, Number> scheduleChart;
+    @FXML private Label startDateErrorLabel;
+
+    @FXML private Button calculateButton;
+    @FXML private Button scheduleButton;
+    @FXML private Button clearButton;
+    @FXML private Button backButton;
+
+    @FXML private TextArea resultsArea;
 
     @FXML
     private void initialize() {
-        // Desactivar animaciones para mantener tooltips
-        scheduleChart.setAnimated(false);
-        // Mostrar símbolos
-        scheduleChart.setCreateSymbols(true);
+        // Ocultar mensajes de error
+        nameErrorLabel.setVisible(false);
+        principalErrorLabel.setVisible(false);
+        termErrorLabel.setVisible(false);
+        rateErrorLabel.setVisible(false);
+        startDateErrorLabel.setVisible(false);
+
+        // Configurar área de resultados
+        resultsArea.setEditable(false);
+        resultsArea.setWrapText(true);
     }
 
+    /**
+     * Muestra interés, saldo restante y pago mensual mes a mes, y total pagado al final.
+     */
     @FXML
     private void onCalculatePayment() {
-        try {
-            Prestamo prestamo = readPrestamo();
-            // Registra en el servicio
-            FinancieroService.getInstance().addProducto(prestamo);
+        resultsArea.clear();
+        Prestamo prestamo = validateAndReadPrestamo();
+        if (prestamo == null) return;
 
-            double cuota = prestamo.calcularCuotaMensual();
-            showInfo("Cuota mensual: " + String.format("%.2f", cuota));
-        } catch (IllegalArgumentException e) {
-            showError("Datos inválidos", e.getMessage());
-        }
+        // Pago mensual calculado por el préstamo
+        double cuotaMensual = prestamo.calcularCuotaMensual();
+        List<Cuota> cronograma = prestamo.generarCronograma();
+
+        // Calcular total pagado (suma de cada cuota)
+        double totalPagado = cronograma.stream()
+                .mapToDouble(c -> c.getCapital() + c.getInteres())
+                .sum();
+
+        // Construir texto de resultados
+        StringBuilder sb = new StringBuilder();
+        sb.append(String.format("Pago mensual fijo: %.2f\n", cuotaMensual));
+        sb.append(String.format("Total pagado: %.2f", totalPagado));
+
+        resultsArea.setText(sb.toString());
     }
 
+    /**
+     * Muestra un popup con la proyección del saldo en gráfico.
+     */
     @FXML
     private void onGenerateSchedule() {
-        try {
-            Prestamo prestamo = readPrestamo();
-            FinancieroService.getInstance().addProducto(prestamo);
-            List<Cuota> cronograma = prestamo.generarCronograma();
+        Prestamo prestamo = validateAndReadPrestamo();
+        if (prestamo == null) return;
 
-            // Limpiar series previas
-            scheduleChart.getData().clear();
+        List<Cuota> cronograma = prestamo.generarCronograma();
+        int meses = cronograma.size();
 
-            // Serie de saldo restante
-            XYChart.Series<Number, Number> seriesSaldo = new XYChart.Series<>();
-            seriesSaldo.setName("Saldo");
+        // Ejes
+        NumberAxis xAxis = new NumberAxis(1, meses, 1);
+        xAxis.setLabel("Mes");
+        NumberAxis yAxis = new NumberAxis();
+        yAxis.setLabel("Saldo Restante");
 
-            for (int i = 0; i < cronograma.size(); i++) {
-                Cuota c = cronograma.get(i);
-                int mes = i + 1;
-                XYChart.Data<Number, Number> dataPoint = new XYChart.Data<>(mes, c.getSaldo());
-                seriesSaldo.getData().add(dataPoint);
-            }
+        // Gráfico
+        LineChart<Number, Number> chart = new LineChart<>(xAxis, yAxis);
+        chart.setTitle("Cronograma de Saldo");
+        chart.setAnimated(false);
+        chart.setCreateSymbols(true);
 
-            scheduleChart.getData().add(seriesSaldo);
-
-            // Agregar tooltips y hover effects a cada punto
-            Platform.runLater(() -> {
-                for (XYChart.Data<Number, Number> data : seriesSaldo.getData()) {
-                    data.nodeProperty().addListener((obs, oldNode, newNode) -> {
-                        if (newNode != null) {
-                            String tooltipText = String.format("Mes: %d Saldo: %.2f",
-                            data.getXValue().intValue(), data.getYValue().doubleValue());
-                            Tooltip tooltip = new Tooltip(tooltipText);
-                            Tooltip.install(newNode, tooltip);
-                            newNode.setOnMouseEntered(e -> newNode.setStyle("-fx-scale-x:1.2; -fx-scale-y:1.2;"));
-                            newNode.setOnMouseExited(e -> newNode.setStyle(""));
-                        }
-                    });
-                }
-            });
-        } catch (IllegalArgumentException e) {
-            showError("Datos inválidos", e.getMessage());
+        XYChart.Series<Number, Number> series = new XYChart.Series<>();
+        series.setName("Saldo");
+        for (int i = 0; i < meses; i++) {
+            Cuota c = cronograma.get(i);
+            series.getData().add(new XYChart.Data<>(i + 1, c.getSaldo()));
         }
+        chart.getData().add(series);
+
+        // Tooltips y hover
+        Platform.runLater(() -> {
+            for (XYChart.Data<Number, Number> data : series.getData()) {
+                Tooltip.install(data.getNode(), new Tooltip(
+                        String.format("Mes %d\nSaldo: %.2f",
+                                data.getXValue().intValue(), data.getYValue().doubleValue())
+                ));
+                data.getNode().setOnMouseEntered(e -> data.getNode()
+                        .setStyle("-fx-scale-x:1.2; -fx-scale-y:1.2;"));
+                data.getNode().setOnMouseExited(e -> data.getNode().setStyle(""));
+            }
+        });
+
+        // Mostrar popup
+        Stage popup = new Stage();
+        popup.setTitle("Proyección de Préstamo");
+        popup.setScene(new Scene(chart, 800, 600));
+        popup.show();
     }
 
     @FXML
-    private void onBackToMenu() throws Exception {
+    private void onClear() {
+        nameField.clear();
+        principalField.clear();
+        termField.clear();
+        rateField.clear();
+        startDatePicker.setValue(null);
+        resultsArea.clear();
+        nameErrorLabel.setVisible(false);
+        principalErrorLabel.setVisible(false);
+        termErrorLabel.setVisible(false);
+        rateErrorLabel.setVisible(false);
+        startDateErrorLabel.setVisible(false);
+    }
+
+    @FXML
+    private void onBackToMenu() throws IOException {
         Parent menu = FXMLLoader.load(getClass().getResource(
                 "/com/miempresa/app/ui/MainMenu.fxml"));
-        Stage stage = (Stage) principalField.getScene().getWindow();
+        Stage stage = (Stage) nameField.getScene().getWindow();
         stage.getScene().setRoot(menu);
     }
 
-    private Prestamo readPrestamo() {
+    /**
+     * Valida campos y retorna Prestamo o null.
+     */
+    private Prestamo validateAndReadPrestamo() {
+        boolean valid = true;
+        valid &= ValidationUtil.requireNonEmpty(nameField, nameErrorLabel,
+                "Nombre del préstamo requerido.");
+        valid &= ValidationUtil.requireValidAmount(principalField,
+                principalErrorLabel, "Monto principal");
+
+        if (!ValidationUtil.requireNonEmpty(termField, termErrorLabel,
+                "Plazo requerido.")) {
+            valid = false;
+        } else {
+            try {
+                int t = Integer.parseInt(termField.getText().trim());
+                if (t <= 0) throw new NumberFormatException();
+                termErrorLabel.setVisible(false);
+            } catch (NumberFormatException ex) {
+                termErrorLabel.setText("Plazo debe ser entero >0.");
+                termErrorLabel.setVisible(true);
+                valid = false;
+            }
+        }
+
+        valid &= ValidationUtil.requireValidAmount(rateField,
+                rateErrorLabel, "Tasa anual");
+
+        if (startDatePicker.getValue() == null) {
+            startDateErrorLabel.setText("Seleccione fecha inicio.");
+            startDateErrorLabel.setVisible(true);
+            valid = false;
+        } else {
+            startDateErrorLabel.setVisible(false);
+        }
+
+        if (!valid) return null;
+
         String name = nameField.getText().trim();
-        if (name.isEmpty()) throw new IllegalArgumentException("Nombre del préstamo requerido.");
-        double principal;
-        try { principal = Double.parseDouble(principalField.getText().trim()); }
-        catch (NumberFormatException e) { throw new IllegalArgumentException("Monto principal debe ser numérico."); }
-        int term;
-        try { term = Integer.parseInt(termField.getText().trim()); }
-        catch (NumberFormatException e) { throw new IllegalArgumentException("Plazo debe ser entero."); }
-        double rate;
-        try { rate = Double.parseDouble(rateField.getText().trim()); }
-        catch (NumberFormatException e) { throw new IllegalArgumentException("Tasa anual debe ser numérico."); }
+        double principal = Double.parseDouble(
+                principalField.getText().trim().replace(",", ".")
+        );
+        int term = Integer.parseInt(termField.getText().trim());
+        double rate = Double.parseDouble(
+                rateField.getText().trim().replace(",", ".")
+        );
         LocalDate start = startDatePicker.getValue();
-        if (start == null) throw new IllegalArgumentException("Seleccione la fecha de inicio.");
+
         return new Prestamo(name, principal, start, term, rate);
-    }
-
-    private void showError(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
-    }
-
-    private void showInfo(String message) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Información");
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
     }
 }

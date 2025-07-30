@@ -1,56 +1,57 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.chart.LineChart?>
-<?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+
 <VBox xmlns="http://javafx.com/javafx/17"
       xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="com.miempresa.app.ui.PrestamoController"
-      spacing="15" alignment="TOP_CENTER" styleClass="root-pane"
-      style="-fx-background-color: #f5f5f5;">
+      spacing="15" alignment="TOP_CENTER" styleClass="root-pane">
     <padding>
         <Insets top="20" right="30" bottom="20" left="30"/>
     </padding>
+
     <Label text="Gestión de Préstamos Bancarios" styleClass="form-title"/>
-    <GridPane hgap="10" vgap="10">
+
+    <GridPane hgap="10" vgap="5">
         <columnConstraints>
+            <ColumnConstraints percentWidth="30"/>
             <ColumnConstraints percentWidth="40"/>
-            <ColumnConstraints percentWidth="60"/>
+            <ColumnConstraints percentWidth="30"/>
         </columnConstraints>
+
         <Label text="Nombre Préstamo:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
-        <TextField fx:id="nameField" promptText="Préstamo Banco A" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+        <TextField fx:id="nameField" promptText="Préstamo A" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+        <Label fx:id="nameErrorLabel" visible="false" styleClass="error-label" GridPane.rowIndex="0" GridPane.columnIndex="2"/>
 
         <Label text="Monto Principal:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
-        <TextField fx:id="principalField" promptText="5000" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+        <TextField fx:id="principalField" promptText="5000.00" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+        <Label fx:id="principalErrorLabel" visible="false" styleClass="error-label" GridPane.rowIndex="1" GridPane.columnIndex="2"/>
 
         <Label text="Plazo (meses):" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
         <TextField fx:id="termField" promptText="12" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+        <Label fx:id="termErrorLabel" visible="false" styleClass="error-label" GridPane.rowIndex="2" GridPane.columnIndex="2"/>
 
         <Label text="Tasa Anual (%):" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
         <TextField fx:id="rateField" promptText="10" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+        <Label fx:id="rateErrorLabel" visible="false" styleClass="error-label" GridPane.rowIndex="3" GridPane.columnIndex="2"/>
 
         <Label text="Fecha Inicio:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
         <DatePicker fx:id="startDatePicker" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+        <Label fx:id="startDateErrorLabel" visible="false" styleClass="error-label" GridPane.rowIndex="4" GridPane.columnIndex="2"/>
     </GridPane>
 
     <HBox spacing="15">
-        <Button text="Calcular Cuota" onAction="#onCalculatePayment" styleClass="btn-primary"/>
-        <Button text="Generar Cronograma" onAction="#onGenerateSchedule" styleClass="btn-secondary"/>
-        <Button text="Volver al Menú" onAction="#onBackToMenu"/>
+        <Button text="Calcular Pago" onAction="#onCalculatePayment" styleClass="btn-tertiary"/>
+        <Button text="Mostrar Cronograma" onAction="#onGenerateSchedule" styleClass="btn-tertiary"/>
+        <Button text="Limpiar" onAction="#onClear" styleClass="btn-clear"/>
+        <Button text="Volver al Menú" onAction="#onBackToMenu" styleClass="btn-clear"/>
     </HBox>
 
-    <!-- Chart para mostrar cronograma (solo saldo) -->
-    <LineChart fx:id="scheduleChart" title="Saldo Restante"
-               prefHeight="500" prefWidth="700" VBox.vgrow="ALWAYS"
-               animated="true" createSymbols="true">
-        <xAxis>
-            <NumberAxis label="Mes" fx:id="xAxis"/>
-        </xAxis>
-        <yAxis>
-            <NumberAxis label="Saldo" fx:id="yAxis"/>
-        </yAxis>
-    </LineChart>
-
-    <!-- Controlador de Préstamos -->
+    <!-- Área de resultados -->
+    <TextArea fx:id="resultsArea"
+              promptText="Aquí se mostrará interés mensual, saldo y pago mensual"
+              prefRowCount="8"
+              wrapText="true"
+              styleClass="output-area"/>
 </VBox>

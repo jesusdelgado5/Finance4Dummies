@@ -15,7 +15,7 @@ public class MainApp extends Application {
         Parent root = FXMLLoader.load(getClass().getResource(
                 "/com/miempresa/app/ui/MainMenu.fxml"
         ));
-        Scene scene = new Scene(root, 800, 600);
+        Scene scene = new Scene(root, 1200, 600);
         // Cargar CSS global
         scene.getStylesheets().add(getClass().getResource(
                 "/com/miempresa/app/ui/style.css").toExternalForm());

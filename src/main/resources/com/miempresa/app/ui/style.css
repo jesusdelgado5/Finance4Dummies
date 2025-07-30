@@ -1,24 +1,70 @@
 .root-pane {
-    -fx-background-color: #f5f5f5;
+    -fx-background-color: #85C1E9; /* Azul pastel más fuerte */
+    -fx-padding: 20;
+    -fx-spacing: 15;
 }
+.root-pane2 {
+    -fx-background-color: #AEC6CF; /* Azul pastel más fuerte */
+    -fx-padding: 20;
+    -fx-spacing: 15;
+}
+
+/* Título del formulario */
 .form-title {
+    -fx-font-size: 36px; /* Tamaño más grande */
+    -fx-font-weight: bold;
+    -fx-text-fill: linear-gradient(to right, #1E90FF, #00BFFF); /* Azul dinámico */
+    -fx-alignment: center;
+    -fx-effect: dropshadow(gaussian, rgba(30,144,255,0.8), 10, 0, 0, 0);
+    -fx-padding: 10 0;
+}
+.form-title:hover {
+    -fx-scale-x: 1.1;
+    -fx-scale-y: 1.1;
+    -fx-effect: dropshadow(gaussian, rgba(0,191,255,0.9), 20, 0, 0, 0);
+}
+
+.label {
     -fx-font-size: 20px;
     -fx-font-weight: bold;
+    -fx-text-fill: #34495E;
+    -fx-alignment: center;
+    -fx-text-alignment: center;
+    -fx-padding: 5 0;
+    -fx-transition: all 0.3s ease-in-out;
 }
-.btn-primary {
-    -fx-background-color: #007acc;
-    -fx-text-fill: white;
-    -fx-padding: 8 15 8 15;
+.label:hover {
+    -fx-text-fill: #1ABC9C;
+    -fx-scale-x: 1.1;
+    -fx-scale-y: 1.1;
 }
-.btn-secondary {
-    -fx-background-color: #00aa66;
-    -fx-text-fill: white;
-    -fx-padding: 8 15 8 15;
+
+
+/* Campos de texto y selectores de fecha */
+.text-field, .date-picker {
+    -fx-background-color: white;
+    -fx-background-radius: 8px;
+    -fx-padding: 8px;
+    -fx-font-size: 16px; /* Texto más grande */
+    -fx-alignment: center;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 4, 0, 0, 2);
 }
+.text-field:focused, .date-picker:focused {
+    -fx-border-color: #3498DB;
+    -fx-border-width: 2px;
+}
+
+/* Área de salida */
 .output-area {
-    -fx-font-family: monospace;
-    -fx-border-color: #ccc;
-    -fx-border-width: 1px;
+    -fx-background-color: linear-gradient(to bottom right, #FFF59D, #FFD54F); /* Amarillo dinámico */
+    -fx-background-radius: 8px;
+    -fx-font-family: "Consolas";
+    -fx-font-size: 14px;
+    -fx-padding: 15;
+    -fx-text-fill: #2C3E50;
+    -fx-text-alignment: center;
+    -fx-alignment: center;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 6, 0, 0, 2);
 }
 .menu-root {
     -fx-background-image: url("../resources/menu_bg.png");
@@ -46,4 +92,100 @@
     -fx-background-color: #004d00;    /* más oscuro al presionar */
     -fx-scale-x: 0.95;
     -fx-scale-y: 0.95;
+}
+
+.title-crayon {
+    -fx-font-family: "Comic Sans MS", "Chalkboard SE", cursive;
+    -fx-font-size: 120px;
+    -fx-font-style: italic;
+    -fx-font-weight: bold;
+
+    /* Degradado cálido de izquierda a derecha */
+    -fx-text-fill: linear-gradient(
+            from 0% 0% to 100% 0%,
+            #FF5E62 0%,    /* rojo anaranjado */
+            #FF9966 33%,   /* anaranjado */
+            #FFD56B 66%,   /* amarillo suave */
+            #A8E063 100%   /* verde lima */
+    );
+
+    /* Tres sombras anidadas para simular superposición */
+    -fx-effect:
+            dropshadow(gaussian, #FF6F61, 0, 0, -3, -3)
+            dropshadow(gaussian, #6B5B95, 0, 0, 3, -3)
+                    dropshadow(gaussian, #FFB347, 0, 0, 0, 3)
+              ;
+}
+
+.error-label {
+    -fx-text-fill: #e74c3c;
+    -fx-font-size: 0.9em;
+}
+.text-field.error,
+.date-picker.error {
+    -fx-border-color: #e74c3c;
+    -fx-border-width: 2;
+}
+
+.btn-clear {
+    -fx-background-color: linear-gradient(from 0% 0% to 0% 100%, #ffeb3b 0%, #f9a825 100%);
+    -fx-background-radius: 4;
+    -fx-border-radius: 4;
+    -fx-border-color: #fbc02d;
+    -fx-border-width: 1;
+    -fx-text-fill: #212121;
+    -fx-padding: 6 12;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 4, 0, 0, 2);
+}
+
+.btn-clear:hover {
+    -fx-background-color: linear-gradient(from 0% 0% to 0% 100%, #fff176 0%, #fdd835 100%);
+}
+
+.btn-clear:pressed {
+    -fx-background-color: linear-gradient(from 0% 0% to 0% 100%, #ffee58 0%, #fbc02d 100%);
+    -fx-translate-y: 1;
+}
+
+.btn-tertiary {
+    -fx-background-color: linear-gradient(to bottom right, #6FCF97, #019267);
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 4, 0, 0, 2);
+    -fx-padding: 8 20 8 20;
+}
+
+.btn-tertiary:hover {
+    -fx-background-color: linear-gradient(to bottom right, #019267, #6FCF97);
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 6, 0, 0, 3);
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
+}
+
+.btn-tertiary:pressed {
+    -fx-background-color: #01754D;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 2, 0, 0, 1);
+    -fx-scale-x: 0.95;
+    -fx-scale-y: 0.95;
+}
+/* Alineación dinámica y organizada */
+VBox.root-pane > * {
+    -fx-alignment: center; /* Centrar todos los hijos */
+}
+
+GridPane {
+    -fx-hgap: 10;
+    -fx-vgap: 10;
+    -fx-alignment: center;
+}
+
+HBox {
+    -fx-alignment: center;
+    -fx-spacing: 15;
 }
