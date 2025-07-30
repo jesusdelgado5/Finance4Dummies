@@ -189,3 +189,42 @@ HBox {
     -fx-alignment: center;
     -fx-spacing: 15;
 }
+
+/* Fondo de la página de inicio */
+.start-pane {
+    -fx-background-color: linear-gradient(to bottom right, #FFECB3, #FFE0B2);
+}
+
+/* Título principal */
+.presentation-title {
+    -fx-font-size: 32px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #34495E;
+    -fx-effect: dropshadow(gaussian, rgba(52,73,94,0.8), 8, 0, 0, 2);
+    -fx-alignment: center;
+    -fx-padding: 10 0;
+    -fx-scale-x: 1;
+    -fx-scale-y: 1;
+    -fx-transition: all 0.3s ease;
+}
+.presentation-title:hover {
+    -fx-text-fill: #E67E22;
+    -fx-scale-x: 1.1;
+    -fx-scale-y: 1.1;
+}
+
+/* Subtítulo */
+.presentation-subtitle {
+    -fx-font-size: 24px;
+    -fx-font-style: italic;
+    -fx-text-fill: #5D6D7E;
+    -fx-padding: 5 0;
+}
+
+/* Texto de los datos */
+.presentation-text {
+    -fx-font-size: 18px;
+    -fx-text-fill: #2C3E50;
+    -fx-padding: 2 0;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 4, 0, 0, 1);
+}
