@@ -42,7 +42,7 @@
             <Button fx:id="btnInversiones" onAction="#goToInversiones" styleClass="btn-animated" text="Inversión en Bolsa">
                 <font><Font name="Eras Bold ITC" size="20.0" /></font>
             </Button>
-            <Button fx:id="btnComparador" onAction="#goToComparador" styleClass="btn-animated" text="Comparar Productos">
+            <Button fx:id="btnComparador" onAction="#goToComparador" styleClass="btn-animated" text="Comparar Inversiones">
                 <font><Font name="Eras Bold ITC" size="20.0" /></font>
             </Button>
         </VBox>
